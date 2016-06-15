@@ -1,0 +1,30 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.common;
+
+public class SldbEditorInfo {
+
+    private String jndiHost;
+    private static SldbEditorInfo editorInfo = null;
+    
+    
+    public static SldbEditorInfo getInstance() {
+        if (editorInfo == null)
+            editorInfo = new SldbEditorInfo();
+        return editorInfo;
+    }
+    
+    public String getJndiHost() {
+        
+        return jndiHost;
+    }
+
+    public void setJndiHost(String jndiHost) {
+    
+        this.jndiHost = jndiHost;
+    }
+    
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+}

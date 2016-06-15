@@ -1,0 +1,43 @@
+10
+
+dir
+125437
+http://jcvas.iscp.telcordia.com:8080/src/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/sdr
+http://jcvas.iscp.telcordia.com:8080/src
+
+
+
+2012-03-04T10:20:22.147951Z
+71387
+dkarunan
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+045dd424-34ff-11de-8fb0-dded75507078
+
+dialog
+dir
+
+editor
+dir
+
+guieditor
+dir
+
+setable
+dir
+
+wizard
+dir
+

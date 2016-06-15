@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/connector
+END
+RemoteSldbConnector.java
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/connector/RemoteSldbConnector.java
+END
+FileSystemSldbConnector.java
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/connector/FileSystemSldbConnector.java
+END
+SldbConnector.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/connector/SldbConnector.java
+END

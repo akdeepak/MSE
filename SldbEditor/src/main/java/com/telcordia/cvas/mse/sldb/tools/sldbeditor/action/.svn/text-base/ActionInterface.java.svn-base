@@ -1,0 +1,16 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.action;
+
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.Connection;
+
+public interface ActionInterface {
+
+    void execute(String value, Connection connection);
+
+    String getTitle();
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+}

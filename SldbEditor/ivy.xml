@@ -1,0 +1,37 @@
+<!-- PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY -->
+<!-- Copyright @ 2009 Telcordia Technologies, Inc. -->
+<!-- All Rights Reserved. -->
+<!-- @(#) $URL: http://jcvas.iscp.telcordia.com:8080/src/trunk/delivered/MSE/SDP/SldbEditor/ivy.xml $ $Rev: 64553 $ $LastChangedBy: achoubey $ $Date: 2012-01-12 12:26:28 +0530 (Thu, 12 Jan 2012) $ -->
+
+<ivy-module version="2.0">
+  <info module="SldbEditor" organisation="jcvas.mse" status="integration"> </info>
+  <publications>
+    <artifact ext="zip" name="com.telcordia.cvas.mse.sldb.tools.sldbeditor"> </artifact>
+  </publications>
+  <dependencies>
+  	<dependency org="jcvas.mse" name="BuildEclipse" rev="${MSE-JAR-RELEASE}" />
+    <dependency org="jcvas.mse" name="mse_ijas_sldb_lib" rev="${MSE-JAR-RELEASE}">
+      <artifact name="mse_ijas_sldb_lib" type="jar"></artifact>
+    </dependency>
+    <dependency org="jcvas.mse" name="mse_ijas_sldb" rev="${MSE-JAR-RELEASE}">
+      <artifact name="mse_ijas_sldb" type="jar"></artifact>
+      <artifact name="mse_ijas_sldb_gen" type="jar"></artifact>
+    </dependency>
+    <dependency rev="${log4j-rev}" name="log4j" org="apache"></dependency>
+    <dependency rev="${xstream-rev}" name="xstream" org="xstream"></dependency>
+    <dependency rev="${commons-logging-rev}" name="commons-logging" org="apache"> </dependency>
+    <dependency rev="${xpp3-rev}" name="xpp3" org="xstream"></dependency>
+    <dependency org="jcvas.mse" name="libisdb_simdb_shr_pc" rev="${MSE-JAR-RELEASE}">
+      <artifact name="libisdb_simdb_shr_pc" type="jar"></artifact>
+      <artifact name="jsldbtool" type="jar"></artifact>
+      <artifact name="sldb_bean_access" type="jar"></artifact>
+    </dependency>
+    <dependency org="jcvas.mse" name="mse_dbaccess_sldb" rev="${MSE-JAR-RELEASE}">
+      <artifact name="mse_dbaccess_sldb" type="jar"></artifact>
+    </dependency>
+     <dependency org="cvas.node" name="nodelibj" rev="${MSE-JAR-RELEASE}">
+      <artifact name="libisdb_simdb_shr_int" type="jar"></artifact>
+    </dependency>
+    <dependency org="jboss" name="jboss" rev="${jboss-rev}"></dependency>
+  </dependencies>
+</ivy-module>

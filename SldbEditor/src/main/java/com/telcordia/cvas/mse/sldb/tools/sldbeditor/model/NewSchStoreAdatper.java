@@ -1,0 +1,129 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.model;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import com.telcordia.iscp.platform.isdbSimdbShr.isdbSchemaFormatIntJ;
+
+import com.telcordia.cvas.mse.db.sldbobj.DataType;
+import com.telcordia.cvas.mse.db.sldbobj.SchFieldStore;
+import com.telcordia.cvas.mse.db.sldbobj.SchStore;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.setable.SchTask;
+
+public class NewSchStoreAdatper {
+    private SchStore schStore;
+    private SchStore finalschStore;
+    private List<SchFieldStore> schFieldStoreList;
+    private List<SchStore> embdTableStore;
+    private List<SchStore> finalEmbdTableStore;
+
+    public NewSchStoreAdatper(SchStore schStore) {
+        this.schStore = schStore;
+        schFieldStoreList = new ArrayList<SchFieldStore>();
+        embdTableStore = new ArrayList<SchStore>();
+
+        schFieldStoreList.addAll(schStore.getFieldList());
+        embdTableStore.addAll(schStore.getEmbeddedSchemaList());
+
+        finalschStore = new SchStore(schStore.getName());
+        finalEmbdTableStore = new ArrayList<SchStore>();
+
+    }
+
+    public void addSchFieldStore(SchFieldStore schFieldStore) {
+        schFieldStoreList.add(schFieldStore);
+    }
+
+    public void addSubSchStore(SchStore schStore) {
+        embdTableStore.add(schStore);
+        schFieldStoreList.add(new SchFieldStore(schStore, schStore.getName(),
+                DataType.TABLE, 0, 0, "", 0, "", 0, this.isEmbedded()));
+    }
+
+    public boolean isEmbedded() {
+        return schStore.isEmbedded();
+    }
+
+    public void removeSchFieldStore(SchFieldStore schFieldStore) {
+        schFieldStoreList.remove(schFieldStore);
+    }
+
+    public SchStore newSchStore() {
+        return finalschStore;
+    }
+
+    public void updateEmbeddedTable(List<SchTask> embdFieldList,
+            SchStore embdTable) {
+        SchStore embSchStore = new SchStore(embdTable.getName());
+        embdTableStore = new ArrayList<SchStore>();
+
+        for (SchTask embdtblefields : embdFieldList) {
+            embSchStore.setSchemaFormat(isdbSchemaFormatIntJ.SIMDB_FIXED_EMBEDDED_RLD);
+
+            embSchStore.addFieldDesc(embdtblefields.getFieldName(),
+                    DataType.valueOf(embdtblefields.getDataType()).getValue(),
+                    (embdtblefields.getUpdateType()),
+                    Integer.parseInt(embdtblefields.getApplicationType()),
+                    embdtblefields.getDefaultValue(),
+                    Integer.parseInt(embdtblefields.getMaxLength()),
+                    embdtblefields.getApplicationData());
+        }
+
+        embdTableStore.add(embSchStore);
+    }
+
+    public void save() {
+
+        for (SchFieldStore schFieldStore : schFieldStoreList) {
+            if (schFieldStore.getDataType() != DataType.TABLE) {
+                finalschStore.addFieldDesc(schFieldStore.getName(),
+                        schFieldStore.getDataType().getValue(),
+                        schFieldStore.getUpdateType(),
+                        schFieldStore.getApplicationDataType(),
+                        schFieldStore.getDefaultValue(),
+                        schFieldStore.getLength(),
+                        schFieldStore.getApplicationData());
+            }
+            else {
+                if (embdTableStore != null && embdTableStore.size() > 0) {
+                    Iterator<SchStore> schemasIterator = embdTableStore.iterator();
+
+                    SchStore subSchStore = schemasIterator.next();
+                    finalschStore.addEmbeddedTable(subSchStore.getName(),
+                            subSchStore, 8, 11, null, "");
+                }
+            }
+        }
+
+    }
+
+    public void removeEmbdTableStore(SchStore schStore) {
+        embdTableStore.remove(schStore);
+        int index = -1;
+        for (SchFieldStore schFieldStore : schFieldStoreList) {
+            if (schFieldStore.getName().equals(schStore.getName())) {
+                index = schFieldStoreList.indexOf(schFieldStore);
+                break;
+            }
+        }
+        if (index != -1) {
+            schFieldStoreList.remove(index);
+        }
+    }
+
+    public void clearAll() {
+        schFieldStoreList = new ArrayList<SchFieldStore>();
+        embdTableStore = new ArrayList<SchStore>();
+
+        finalschStore = new SchStore(schStore.getName());
+        finalEmbdTableStore = new ArrayList<SchStore>();
+
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL: http://jcvas.iscp.telcordia.com:8080/src/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/NewSchStoreAdatper.java $ $Rev: 64550 $ $LastChangedBy: achoubey $ $Date: 2012-01-12 12:21:37 +0530 (Thu, 12 Jan 2012) $" };
+}

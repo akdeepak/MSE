@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/view
+END
+GuiView.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/view/GuiView.java
+END
+ConnectionTreeContentProvider.java
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/view/ConnectionTreeContentProvider.java
+END
+SchemaElementsView.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/view/SchemaElementsView.java
+END
+XmlView.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/view/XmlView.java
+END
+ConnectionsView.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/view/ConnectionsView.java
+END
+ConnectionTreeLabelProvider.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/view/ConnectionTreeLabelProvider.java
+END

@@ -1,0 +1,46 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.sdr.setable;
+
+public class SdrField {
+
+    private String fieldName;
+    private String fieldValue;
+
+    public SdrField() {
+    }
+
+    public SdrField(String fieldName,String fieldValue) {
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
+    }
+
+    public void setFieldValue(String fieldValue) {
+
+        this.fieldValue = fieldValue;
+
+    }
+
+    public String getFieldValue() {
+
+        return fieldValue;
+
+    }
+
+    public void setFieldName(String fieldName) {
+
+        this.fieldName = fieldName;
+
+    }
+
+    public String getFieldName() {
+
+        return fieldName;
+
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+
+}

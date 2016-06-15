@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/src/!svn/ver/67378/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/wizard
+END
+SchemaElementsWiz.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/wizard/SchemaElementsWiz.java
+END
+TablePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/src/!svn/ver/64201/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/wizard/TablePage.java
+END
+FieldPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/src/!svn/ver/67378/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/wizard/FieldPage.java
+END
+SchemaElementsWizard.java
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/wizard/SchemaElementsWizard.java
+END

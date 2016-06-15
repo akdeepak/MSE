@@ -1,0 +1,32 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.model;
+
+import com.telcordia.cvas.mse.db.sldbobj.SdrStore;
+
+public class RecordLeaf {
+
+    private SdrStore record;
+    private Connection connection;
+
+    public RecordLeaf(SdrStore record, Connection connection) {
+        this.record = record;
+        this.connection = connection;
+    }
+
+    public SdrStore getRecord() {
+        return record;
+    }
+
+    public String getName() {
+        return record.getKey();
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+}

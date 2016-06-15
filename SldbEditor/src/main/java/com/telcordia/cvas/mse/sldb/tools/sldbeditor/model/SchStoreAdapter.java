@@ -1,0 +1,249 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.model;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.telcordia.iscp.platform.isdbSimdbShr.isdbSchemaFormatIntJ;
+import com.telcordia.iscp.platform.isdbSimdbShr.isdbSchemaFormatJ;
+
+import com.telcordia.cvas.mse.db.sldbobj.DataType;
+import com.telcordia.cvas.mse.db.sldbobj.SchFieldStore;
+import com.telcordia.cvas.mse.db.sldbobj.SchStore;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.ConsoleUtil;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.Constant;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.guieditor.SchemaEditor.SchTableViewer;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.setable.SchTask;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.setable.SchTaskList;
+
+public class SchStoreAdapter {
+    private SchStore schStore;
+    private SchStore finalSchStore;
+    private List<SchFieldStore> schFieldStoreList;
+    private List<SchStore> addEmbTableStoreList;
+
+    private List<SchTableViewer> embdTableViewerListObj;
+
+    private Map<String, Object> buildMap;
+    private Map embeddedTableMap;
+    private String action;
+
+    public SchStoreAdapter(SchStore schStore) {
+        this.schStore = schStore;
+        schFieldStoreList = new ArrayList<SchFieldStore>();
+        embdTableViewerListObj = new ArrayList<SchTableViewer>();
+        schFieldStoreList.addAll(schStore.getFieldList());
+
+        finalSchStore = new SchStore(schStore.getName());
+
+        buildMap = new LinkedHashMap<String, Object>();
+        embeddedTableMap = new LinkedHashMap();
+        action = null;
+
+        buildSchemaMap(schStore);
+    }
+
+    private void buildSchemaMap(SchStore schStore) {
+
+        for (SchFieldStore schFieldStore : schStore.getFieldList()) {
+            if (schFieldStore.getDataType() != DataType.TABLE) {
+                buildMap.put(schFieldStore.getName(), schFieldStore);
+            }
+            else {
+                SchStore embTableStore = schStore.getEmbeddedSchema(schFieldStore.getName());
+                buildMap.put(embTableStore.getName(), embTableStore);
+            }
+        }
+    }
+
+    public Map getBuildMap() {
+        return buildMap;
+    }
+
+    public String getName() {
+        return finalSchStore.getName();
+    }
+
+    public List<SchFieldStore> getFieldList() {
+        return schFieldStoreList;
+    }
+
+    public void addSchFieldStore(SchFieldStore schFieldStore) {
+        schFieldStoreList.add(schFieldStore);
+        buildMap.put(schFieldStore.getName(), schFieldStore);
+    }
+
+    public void addEmbdTableStore(SchStore schStore) {
+        buildMap.put(schStore.getName(), schStore);
+        schFieldStoreList.add(new SchFieldStore(schStore, schStore.getName(),
+                DataType.TABLE, 0, 0, "", 0, "", 0, this.isEmbedded()));
+    }
+
+    public boolean isEmbedded() {
+        return schStore.isEmbedded();
+    }
+
+    public void removeSchFieldStore(SchFieldStore schFieldStore) {
+        schFieldStoreList.remove(schFieldStore);
+
+        buildMap.remove(schFieldStore.getName());
+    }
+
+    public SchStore getSchStore() {
+        return finalSchStore;
+    }
+
+    public void buildEmbeddedTable() {
+        for (SchTableViewer schTableViewer : embdTableViewerListObj) {
+            SchStore embSchStore = schTableViewer.getTaskList().getEmbTable();
+            SchTaskList result = schTableViewer.getTaskList();
+            List<SchTask> embdFieldList = result.getTasks();
+            for (SchTask embdtblefields : embdFieldList) {
+                embSchStore.setSchemaFormat(isdbSchemaFormatJ.SIMDB_FIXED_EMBEDDED_RLD);
+
+                embSchStore.addFieldDesc(
+                        embdtblefields.getFieldName(),
+                        DataType.valueOf(embdtblefields.getDataType()).getValue(),
+                        (embdtblefields.getUpdateType()),
+                        Integer.parseInt(embdtblefields.getApplicationType()),
+                        embdtblefields.getDefaultValue(),
+                        Integer.parseInt(embdtblefields.getMaxLength()),
+                        embdtblefields.getApplicationData());
+
+            }
+            addEmbTableStoreList.add(embSchStore);
+            // Making a entry in schStoreFieldList
+        }
+
+    }
+
+    public void save() {
+        saveSchema();
+    }
+
+    public void saveSchema() {
+        finalSchStore = new SchStore(schStore.getName());
+        finalSchStore.setSchemaFormat(isdbSchemaFormatJ.SIMDB_VARIABLE_NO_KEY);
+
+        for (Map.Entry<String, Object> iterator : buildMap.entrySet()) {
+            String key = iterator.getKey();
+            Object object = iterator.getValue();
+            if (object instanceof SchFieldStore) {
+                SchFieldStore fieldStore = (SchFieldStore) object;
+                finalSchStore.addFieldDesc(fieldStore.getName(),
+                        fieldStore.getDataType().getValue(),
+                        fieldStore.getUpdateType(),
+                        fieldStore.getApplicationDataType(),
+                        fieldStore.getDefaultValue(), fieldStore.getLength(),
+                        fieldStore.getApplicationData());
+            }
+            else if (object instanceof SchStore) {
+                if (embeddedTableMap.containsKey(key)) {
+                    SchStore embSchStore = null;
+                    SchTableViewer embTableObj = (SchTableViewer) embeddedTableMap.get(key);
+                    if (action != null
+                            && action.equalsIgnoreCase(Constant.ACTION_UPDATE_NEW)) {
+                        embSchStore = new SchStore(
+                                embTableObj.getTaskList().getEmbTable().getName());
+                    }
+                    else {
+                        embSchStore = embTableObj.getTaskList().getEmbTable();
+                    }
+                    SchTaskList result = embTableObj.getTaskList();
+                    List<SchTask> embdFieldList = result.getTasks();
+                    for (SchTask embdtblefields : embdFieldList) {
+                        embSchStore.setSchemaFormat(isdbSchemaFormatIntJ.SIMDB_FIXED_EMBEDDED_RLD);
+
+                        embSchStore.addFieldDesc(
+                                embdtblefields.getFieldName(),
+                                DataType.valueOf(embdtblefields.getDataType()).getValue(),
+                                (embdtblefields.getUpdateType()),
+                                Integer.parseInt(embdtblefields.getApplicationType()),
+                                embdtblefields.getDefaultValue(),
+                                Integer.parseInt(embdtblefields.getMaxLength()),
+                                embdtblefields.getApplicationData());
+
+                    }
+                    finalSchStore.addEmbeddedTable(embSchStore.getName(),
+                            embSchStore, 8, 11, null, "");
+                }
+            }
+        }
+    }
+
+    public void removeEmbdTableStore(SchStore schStore) {
+        int index = -1;
+        for (SchFieldStore schFieldStore : schFieldStoreList) {
+            if (schFieldStore.getName().equals(schStore.getName())) {
+                index = schFieldStoreList.indexOf(schFieldStore);
+                break;
+            }
+        }
+        if (index != -1) {
+            schFieldStoreList.remove(index);
+        }
+
+        buildMap.remove(schStore.getName());
+    }
+
+    public void clearAll() {
+        schFieldStoreList = new ArrayList<SchFieldStore>();
+        finalSchStore = new SchStore(schStore.getName());
+        buildMap.clear();
+    }
+
+    public void addEmbdTableObj(SchStore embTable, SchTableViewer schTableViewer) {
+        //embdTableViewerListObj.add(schTableViewer);
+        embeddedTableMap.put(embTable.getName(), schTableViewer);
+    }
+
+    public SchStore getFinalSchStore() {
+        //Serialization
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out;
+        try {
+            out = new ObjectOutputStream(bos);
+            out.writeObject(schStore);
+        }
+        catch (IOException e) {
+            ConsoleUtil.addMessage(Constant.ERROR_SERIALIZATION, false);
+            return null;
+        }
+
+        //De-serialization 
+        ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+        ObjectInputStream in;
+        try {
+            in = new ObjectInputStream(bis);
+            finalSchStore = (SchStore) in.readObject();
+        }
+        catch (IOException e) {
+            ConsoleUtil.addMessage(Constant.ERROR_SERIALIZATION, false);
+            return null;
+        }
+        catch (ClassNotFoundException e) {
+            ConsoleUtil.addMessage(Constant.ERROR_SERIALIZATION, false);
+            return null;
+        }
+
+        //fillSchStore(finalSchStore);
+
+        return finalSchStore;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL: http://jcvas.iscp.telcordia.com:8080/src/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/SchStoreAdapter.java $ $Rev: 64550 $ $LastChangedBy: achoubey $ $Date: 2012-01-12 12:21:37 +0530 (Thu, 12 Jan 2012) $" };
+}

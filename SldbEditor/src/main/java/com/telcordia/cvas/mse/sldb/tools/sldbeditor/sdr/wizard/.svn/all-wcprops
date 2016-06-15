@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/src/!svn/ver/71387/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/sdr/wizard
+END
+SdrInputPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/sdr/wizard/SdrInputPage.java
+END
+SdrFieldPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/src/!svn/ver/71387/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/sdr/wizard/SdrFieldPage.java
+END
+SdrCreateWizard.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/sdr/wizard/SdrCreateWizard.java
+END
+SdrSchemaPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/sdr/wizard/SdrSchemaPage.java
+END

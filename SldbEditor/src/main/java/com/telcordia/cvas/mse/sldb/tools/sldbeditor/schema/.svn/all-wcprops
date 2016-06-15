@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/src/!svn/ver/67378/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema
+END
+ResourceManagerPerspectiveFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 159
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/ResourceManagerPerspectiveFactory.java
+END
+Activator.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/Activator.java
+END

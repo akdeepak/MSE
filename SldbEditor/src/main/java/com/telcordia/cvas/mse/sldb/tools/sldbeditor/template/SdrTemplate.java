@@ -1,0 +1,167 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.template;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import org.eclipse.swt.widgets.Text;
+
+import com.telcordia.cvas.mse.db.sldbobj.DataType;
+import com.telcordia.cvas.mse.db.sldbobj.SchFieldStore;
+import com.telcordia.cvas.mse.db.sldbobj.SchStore;
+import com.telcordia.cvas.mse.db.sldbobj.SdrFieldStore;
+import com.telcordia.cvas.mse.db.sldbobj.SdrSchemaStore;
+import com.telcordia.cvas.mse.db.sldbobj.SdrStore;
+import com.telcordia.cvas.mse.db.sldbobj.SdrTableStore;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.SeDataType;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.Connection;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.sdr.setable.SdrField;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.sdr.setable.SdrRecord;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.sdr.setable.SeSdrRecordStore;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.util.SeHelper;
+
+/**
+ * 
+ * Stores Subscriber Record
+ *
+ * @author dkarunan
+ * @version $Rev: 71403 $
+ *
+ */
+public class SdrTemplate {
+    private String subscriberId;
+    private Map<String, Map<String, Text>> guiMap;
+    private Map<SchStore, List<SchFieldStore>> dbMap;
+    private Collection<SchStore> addedSchemas;
+    private Map<String, SeSdrRecordStore> embdTableStoreList;
+
+    public SdrTemplate() {
+        subscriberId = null;
+    }
+
+    public void setSubscriberId(String subscriberId) {
+        this.subscriberId = subscriberId;
+    }
+
+    public String getSubscriberId() {
+        return subscriberId;
+    }
+
+    public void buildSdr(Connection connection) {
+        Map<SchStore, List<SchFieldStore>> dbMap = getDbMap();
+        Map<String, Map<String, Text>> guiMap = getGuiMap();
+        Map<String, SdrSchemaStore> sdrSchemaStoreMap = new LinkedHashMap<String, SdrSchemaStore>();
+        SdrStore sdrStore = new SdrStore(getSubscriberId(), sdrSchemaStoreMap);
+
+        //Performed wizard finish  in schemaTabEdit page i.e. 3/final page
+        if (guiMap != null && guiMap.size() > 0) {
+
+            for (Map.Entry<SchStore, List<SchFieldStore>> dbMapEntry : dbMap.entrySet()) {
+                String schemaName = dbMapEntry.getKey().getName();
+                SchStore sch = dbMapEntry.getKey();
+                List<SchFieldStore> schFieldStoreList = dbMapEntry.getValue();
+                SdrSchemaStore sdrSchemaStore = sdrStore.buildSchema(sch);
+
+                if (guiMap.containsKey(schemaName)) {
+                    Map<String, Text> fieldStoreMap = guiMap.get(schemaName);
+                    Text txtFieldValue = null;
+                    for (SchFieldStore schFieldStore : schFieldStoreList) {
+                        if (schFieldStore.getDataType() == DataType.TABLE) {
+                            if (embdTableStoreList.containsKey(schFieldStore.getName())) {
+                                SdrTableStore sdrTable = sdrSchemaStore.getTable(schFieldStore.getName());
+                                SeSdrRecordStore embdTableRecords = embdTableStoreList.get(schFieldStore.getName());
+                                Vector<SdrRecord> sdrRecVect = embdTableRecords.getRecords();
+                                for (SdrRecord sdrRecord : sdrRecVect) {
+                                    Map<String, SdrField> embFieldStoreMap = sdrRecord.getFieldMap();
+                                    Object[] objValues = new Object[sdrTable.getFieldCount()];
+                                    int i = 0;
+                                    for (Map.Entry<String, SdrField> embEntry : embFieldStoreMap.entrySet()) {
+                                        String fieldName = embEntry.getKey();
+                                        //System.out.println("fieldName -->"
+                                        //    + fieldName);
+                                        SdrField embFields = embEntry.getValue();
+                                        int dataType = sdrTable.getHeader().getField(
+                                                fieldName).getType().getValue();
+                                        objValues[i] = SeDataType.getSeDataType(
+                                                dataType).getDataTypeValue(
+                                                embFields.getFieldValue());
+                                        i++;
+                                    }
+                                    sdrTable.addRecord(objValues);
+                                }
+                            }
+
+                        }
+                        else {
+                            if (fieldStoreMap.containsKey(schFieldStore.getName())) {
+                                txtFieldValue = fieldStoreMap.get(schFieldStore.getName());
+                                SdrFieldStore sdrField = sdrSchemaStore.getField(schFieldStore.getName());
+                                sdrField.setValue(SeDataType.getSeDataType(
+                                        schFieldStore.getDataType().getValue()).getDataTypeValue(
+                                        txtFieldValue.getText()));
+                            }
+                        }
+                    }
+
+                }
+                sdrSchemaStoreMap.put(schemaName, sdrSchemaStore);
+            }
+
+        }
+
+        // Perfrom Finish on page(2) by adding schema alone
+        else if (getAddedSchemas() != null && guiMap == null) {
+
+            for (SchStore sch : getAddedSchemas()) {
+                SdrSchemaStore sdrSchStore = sdrStore.buildSchema(sch);
+                sdrSchemaStoreMap.put(sch.getName(), sdrSchStore);
+            }
+
+        }
+        SeHelper.save(connection, sdrStore);
+
+    }
+
+    public void setDbMap(Map<SchStore, List<SchFieldStore>> dbMap) {
+        this.dbMap = dbMap;
+    }
+
+    public Map<SchStore, List<SchFieldStore>> getDbMap() {
+        return dbMap;
+    }
+
+    public void setGuiMap(Map<String, Map<String, Text>> guiMap) {
+        this.guiMap = guiMap;
+    }
+
+    public Map<String, Map<String, Text>> getGuiMap() {
+        return guiMap;
+    }
+
+    public void setAddedSchemas(Collection<SchStore> collSchStore) {
+        this.addedSchemas = collSchStore;
+    }
+
+    public Collection<SchStore> getAddedSchemas() {
+        return addedSchemas;
+    }
+
+    public void setEmbdTableStoreList(
+            Map<String, SeSdrRecordStore> seSdrRecStoreList) {
+        this.embdTableStoreList = seSdrRecStoreList;
+    }
+
+    public Map<String, SeSdrRecordStore> getEmbdTableStoreList() {
+        return embdTableStoreList;
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL: http://jcvas.iscp.telcordia.com:8080/src/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/template/SdrTemplate.java $ $Rev: 71403 $ $LastChangedBy: dkarunan $ $Date: 2012-03-05 11:31:03 +0530 (Mon, 05 Mar 2012) $" };
+
+}

@@ -1,0 +1,359 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.view;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.ViewPart;
+
+import com.telcordia.cvas.mse.db.sldbobj.SdrStore;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.AbstractSeAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.CloseConnectionAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.ConnectionTreeActionGroup;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.CreateSchemaAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.CreateSdrAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.DeleteSdrAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.NewConnectionAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.RemoveSchemaAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.RetrieveAllSchemaAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.RetrieveSchemaAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.action.RetrieveSdrAction;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.ConsoleUtil;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.Constant;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.Connection;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.ConnectionManager;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.RecordBranch;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.RecordLeaf;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.SchStoreAdapter;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.SchemaBranch;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.SchemaLeaf;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.Activator;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.editor.MultiPageEditor;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.guieditor.SchemaEditorInput;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.xmleditor.EditorController;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.util.ImageUtil;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.util.SeHelper;
+
+/**
+ * This class implements common logic connections view that contains separate connections 
+ * with local folder on file system or remote folder on host. It represents connections 
+ * in tree-structure-oriented _treeViewer
+ *
+ * ConnectionsView
+ *
+ * @author dkarunan
+ *
+ */
+public abstract class ConnectionsView extends ViewPart {
+    private static final HashSet EMPTY_CONNECTIONS = new HashSet();
+
+    private TreeViewer _treeViewer;
+    protected EditorController controller;
+    protected SchStoreAdapter schStoreAdapter;
+
+    public ConnectionsView() {
+        this.controller = EditorController.getInstance();
+    }
+
+    abstract ConnectionTreeLabelProvider getLabelProvider();
+
+    abstract void openEditorPanel(Object object);
+
+    abstract void setConnectionView();
+
+    /**
+     * This is a callback that will allow us to create the _treeViewer and initialize
+     * it.
+    */
+    public void createPartControl(Composite parent) {
+
+        parent.setLayout(new GridLayout());
+        _treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
+                | SWT.V_SCROLL | SWT.BORDER | SWT.FILL | SWT.VIRTUAL);
+        _treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+        _treeViewer.setContentProvider(new ConnectionTreeContentProvider());
+        _treeViewer.setLabelProvider(getLabelProvider());
+
+        //create menu,actions and tool bar
+        createMenu();
+        createToolBar();
+        addListeners();
+        refreshToolBar();
+        Activator.getDefault().startDefaultConnections(this);
+    }
+
+    /**
+     * Create menu in view.
+     */
+    private void createMenu() {
+        final ConnectionTreeActionGroup actionGroup = new ConnectionTreeActionGroup();
+        MenuManager menuManager = new MenuManager("ConnectionTreeContextMenu");
+        menuManager.setRemoveAllWhenShown(true);
+        org.eclipse.swt.widgets.Menu contextMenu = menuManager.createContextMenu(_treeViewer.getTree());
+        _treeViewer.getTree().setMenu(contextMenu);
+        menuManager.addMenuListener(new IMenuListener() {
+            public void menuAboutToShow(IMenuManager menuManager) {
+                setConnectionView();
+                //                Activator.getDefault().startDefaultConnections(this);
+                actionGroup.fillContextMenu(menuManager);
+            }
+        });
+    }
+
+    public void viewerRefresh() {
+        _treeViewer.refresh();
+    }
+
+    /**
+     * Passing the focus request to the _treeViewer's control.
+     */
+    public void setFocus() {
+        _treeViewer.getControl().setFocus();
+        refresh();
+    }
+
+    /**
+     * Updates input in _treeViewer from tree model, expands early expanded connections
+     * and updates enabling tool buttons and context menu items.
+     */
+    public void refresh() {
+        _treeViewer.setInput(ConnectionManager.getInstance());
+        _treeViewer.expandToLevel(2);
+        refreshToolBar();
+        ConsoleUtil.addMessage(getClass().getSimpleName()
+                + Constant.INFO_NAVIGATION_REFRESH, true);
+    }
+
+    public void refreshToolBar() {
+        IToolBarManager toolbar = getViewSite().getActionBars().getToolBarManager();
+        org.eclipse.jface.action.IContributionItem items[] = toolbar.getItems();
+        org.eclipse.jface.action.IContributionItem aicontributionitem[];
+        int j = (aicontributionitem = items).length;
+        for (int i = 0; i < j; i++) {
+            org.eclipse.jface.action.IContributionItem item = aicontributionitem[i];
+            if (item instanceof ActionContributionItem) {
+                ActionContributionItem contrib = (ActionContributionItem) item;
+                org.eclipse.jface.action.IAction contribAction = contrib.getAction();
+                if (contribAction instanceof AbstractSeAction) {
+                    AbstractSeAction action = (AbstractSeAction) contribAction;
+                    action.setEnabled(action.isAvailable());
+                }
+            }
+        }
+    }
+
+    /**
+     * Adding listeners to different GUI components
+     */
+    private void addListeners() {
+        _treeViewer.addDoubleClickListener((new IDoubleClickListener() {
+            public void doubleClick(DoubleClickEvent event) {
+                IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+
+                if (selection != null) {
+                    Object selectedObj = selection.getFirstElement();
+                    openEditorPanel(selectedObj);
+                    /* if (selectedObj instanceof SchemaLeaf) {
+                         openEditorPanel(selectedObj);
+                     }
+                     if (selectedObj instanceof RecordLeaf) {
+                         openEditorPanel(selectedObj);
+                     }*/
+                }
+
+            }
+        }));
+        _treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            @Override
+            public void selectionChanged(SelectionChangedEvent arg0) {
+
+                refreshToolBar();
+
+            }
+
+        });
+    }
+
+    /**
+     * Create tool bar & menu in view.
+     */
+    private void createToolBar() {
+
+        IToolBarManager toolBarMgr = getViewSite().getActionBars().getToolBarManager();
+        toolBarMgr.add(new NewConnectionAction());
+        toolBarMgr.add(new CloseConnectionAction());
+        /*  toolBarMgr.add(new CreateSchemaAction());
+          toolBarMgr.add(new RetrieveSchemaAction());
+          toolBarMgr.add(new RetrieveAllSchemaAction());
+          toolBarMgr.add(new RemoveSchemaAction());
+          toolBarMgr.add(new CreateSdrAction());
+          toolBarMgr.add(new DeleteSdrAction());
+          toolBarMgr.add(new RetrieveSdrAction());*/
+
+        IMenuManager rootMenuManager = getViewSite().getActionBars().getMenuManager();
+        Image connectionimage = ImageUtil.getImage("Images.CreateConnIcon");
+        IMenuManager connectionMgr = new MenuManager(Constant.CONNECTION_TITLE,
+                ImageDescriptor.createFromImage(connectionimage),
+                Constant.CONNECTION_TITLE);
+        connectionMgr.add(new NewConnectionAction());
+        connectionMgr.add(new CloseConnectionAction());
+
+        Image schemaImage = ImageUtil.getImage("Images.SchemasIcon");
+        IMenuManager schemaMgr = new MenuManager(Constant.SCHEMA_TITLE,
+                ImageDescriptor.createFromImage(schemaImage),
+                Constant.SCHEMA_TITLE);
+        schemaMgr.add(new CreateSchemaAction());
+        schemaMgr.add(new RemoveSchemaAction());
+        schemaMgr.add(new RetrieveSchemaAction());
+        schemaMgr.add(new RetrieveAllSchemaAction());
+
+        Image sdrImage = ImageUtil.getImage("Images.ConnectionIcon");
+        IMenuManager sdrMgr = new MenuManager(Constant.SUB_RECORD_TITLE,
+                ImageDescriptor.createFromImage(sdrImage),
+                Constant.SUB_RECORD_TITLE);
+        sdrMgr.add(new CreateSdrAction());
+        sdrMgr.add(new DeleteSdrAction());
+        sdrMgr.add(new RetrieveSdrAction());
+
+        rootMenuManager.add(connectionMgr);
+        rootMenuManager.add(schemaMgr);
+        rootMenuManager.add(sdrMgr);
+
+        ///*********************************
+        /* IMenuManager imm = getViewSite().getActionBars().getMenuManager();
+         org.eclipse.jface.action.IContributionItem items[] = imm.getItems();
+         org.eclipse.jface.action.IContributionItem aicontributionitem[];
+         int j = (aicontributionitem = items).length;
+
+         for (int i = 0; i < j; i++) {
+             org.eclipse.jface.action.IContributionItem item = aicontributionitem[i];
+             if (item instanceof ActionContributionItem) {
+                 ActionContributionItem contrib = (ActionContributionItem) item;
+                 org.eclipse.jface.action.IAction contribAction = contrib.getAction();
+                 if (contribAction instanceof AbstractSeAction) {
+                     AbstractSeAction action = (AbstractSeAction) contribAction;
+                     action.setEnabled(action.isAvailable());
+                 }
+             }
+         }*/
+        ///******************
+    }
+
+    public Object[] getSelected() {
+        IStructuredSelection selection = (IStructuredSelection) _treeViewer.getSelection();
+        if (selection == null) {
+            return null;
+        }
+        Object result[] = selection.toArray();
+        if (result.length == 0) {
+            return null;
+        }
+        else {
+            return result;
+        }
+    }
+
+    /**
+     * 
+     * Open schema/record in editor and setup active page against navigation view
+     *
+     * @param schema
+     * @param page
+     */
+    public void openEditorPanel(Object object, int page) {
+        if (object instanceof SchemaLeaf) {
+            SchemaLeaf schema = (SchemaLeaf) object;
+            // retrieve schema - Lazy Loading
+            SeHelper.retrieveSchema(schema.getName(), schema.getConnection());
+
+            controller.openEditor(schema.getSchStoreAdapter(),
+                    schema.getConnection(), false, Constant.ACTION_RETRIEVE);
+            IWorkbench workbench = PlatformUI.getWorkbench();
+            MultiPageEditor editor = (MultiPageEditor) workbench.getActiveWorkbenchWindow().getActivePage().findEditor(
+                    new SchemaEditorInput(schema.getSchStoreAdapter(),
+                            schema.getConnection(), Constant.ACTION_RETRIEVE));
+            editor.setActivePage(page);
+        }
+        else if (object instanceof RecordLeaf) {
+            RecordLeaf record = (RecordLeaf) object;
+            SdrStore sdrStore = SeHelper.read(record.getName(),
+                    record.getConnection());
+            EditorController.getInstance().sdrOpenEditor(record.getRecord(),
+                    true);
+        }
+
+    }
+
+    public Set getSelectedConnections(boolean recurse) {
+        IStructuredSelection selection = (IStructuredSelection) _treeViewer.getSelection();
+        if (selection == null) {
+            return EMPTY_CONNECTIONS;
+        }
+        LinkedHashSet result = new LinkedHashSet();
+        for (Iterator iter = selection.iterator(); iter.hasNext();) {
+            Object obj = iter.next();
+            if (obj instanceof SchemaBranch) {
+                SchemaBranch sb = (SchemaBranch) obj;
+                result.add(sb.getConnection());
+            }
+            if (obj instanceof RecordBranch) {
+                RecordBranch rb = (RecordBranch) obj;
+                result.add(rb.getConnection());
+            }
+            if (obj instanceof SchemaLeaf) {
+                SchemaLeaf sl = (SchemaLeaf) obj;
+                result.add(sl.getConnection());
+            }
+            if (obj instanceof RecordLeaf) {
+                RecordLeaf rl = (RecordLeaf) obj;
+                result.add(rl.getConnection());
+            }
+        }
+
+        return result;
+    }
+
+    public Connection getSelectedConnection(boolean recurse) {
+        return (Connection) getFirstOf(getSelectedConnections(recurse));
+    }
+
+    private Object getFirstOf(Set set) {
+        if (set == null) {
+            return null;
+        }
+        Iterator iter = set.iterator();
+        if (iter.hasNext()) {
+            return iter.next();
+        }
+        else {
+            return null;
+        }
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL: http://jcvas.iscp.telcordia.com:8080/src/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/view/ConnectionsView.java $ $Rev: 51722 $ $LastChangedBy: dkarunan $ $Date: 2011-09-27 17:16:00 +0530 (Tue, 27 Sep 2011) $" };
+}

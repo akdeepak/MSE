@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/src/!svn/ver/75719/trunk/delivered/MSE/SDP/SldbEditor
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/build.properties
+END
+ivy.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/src/!svn/ver/64553/trunk/delivered/MSE/SDP/SldbEditor/ivy.xml
+END
+build.xml
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/src/!svn/ver/75719/trunk/delivered/MSE/SDP/SldbEditor/build.xml
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/.project
+END
+plugin.xml
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/plugin.xml
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/src/!svn/ver/65840/trunk/delivered/MSE/SDP/SldbEditor/.classpath
+END

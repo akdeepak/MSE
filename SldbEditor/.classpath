@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?ivyXmlPath=ivy.xml&amp;confs=*"/>
+	<classpathentry kind="lib" path="D:/MSE2.0/workspace/lib/libisdb_simdb_shr_pc.jar"/>
+	<classpathentry kind="lib" path="D:/MSE2.0/workspace/lib/sldb_bean_access.jar"/>
+	<classpathentry kind="lib" path="D:/MSE2.0/workspace/lib/libisdb_simdb_shr_int.jar"/>
+	<classpathentry kind="lib" path="D:/MSE2.0/workspace/lib/xpp3.jar"/>
+	<classpathentry kind="lib" path="D:/MSE2.0/workspace/lib/xstream.jar"/>
+	<classpathentry kind="lib" path="D:/MSE2.0/workspace/lib/log4j.jar"/>
+	<classpathentry kind="lib" path="D:/MSEAppDev/workspace/MSESDK/iscp/thirdp/jboss/client/jbossall-client.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

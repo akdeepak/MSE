@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor
+END
+XMLConfiguration.java
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/XMLConfiguration.java
+END
+XMLPartitionScanner.java
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/XMLPartitionScanner.java
+END
+XMLTagScanner.java
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/XMLTagScanner.java
+END
+IXMLColorConstants.java
+K 25
+svn:wc:ra_dav:version-url
+V 154
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/IXMLColorConstants.java
+END
+XMLWhitespaceDetector.java
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/XMLWhitespaceDetector.java
+END
+ColorManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/ColorManager.java
+END
+StringStorage.java
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/StringStorage.java
+END
+StringInput.java
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/StringInput.java
+END
+EditorController.java
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/EditorController.java
+END
+TagRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/TagRule.java
+END
+XMLEditor.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/XMLEditor.java
+END
+XMLDocumentProvider.java
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/xmleditor/XMLDocumentProvider.java
+END

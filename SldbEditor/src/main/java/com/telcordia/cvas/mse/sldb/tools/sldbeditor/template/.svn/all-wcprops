@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/src/!svn/ver/71403/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/template
+END
+SdrTemplate.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/src/!svn/ver/71403/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/template/SdrTemplate.java
+END
+TableTemplate.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/template/TableTemplate.java
+END
+FieldTemplate.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/src/!svn/ver/63599/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/template/FieldTemplate.java
+END
+SchTemplate.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/template/SchTemplate.java
+END

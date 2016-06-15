@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action
+END
+ConnectionTreeActionGroup.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/ConnectionTreeActionGroup.java
+END
+CloseConnectionAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/CloseConnectionAction.java
+END
+DeleteSdrAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/DeleteSdrAction.java
+END
+RetrieveAllSchemaAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/RetrieveAllSchemaAction.java
+END
+CreateSdrAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/CreateSdrAction.java
+END
+RemoveSchemaAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/RemoveSchemaAction.java
+END
+RetrieveSdrAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/RetrieveSdrAction.java
+END
+AbstractSeAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/AbstractSeAction.java
+END
+NewConnectionAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/NewConnectionAction.java
+END
+CreateSchemaAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/CreateSchemaAction.java
+END
+RetrieveSchemaAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/RetrieveSchemaAction.java
+END
+ActionInterface.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/action/ActionInterface.java
+END

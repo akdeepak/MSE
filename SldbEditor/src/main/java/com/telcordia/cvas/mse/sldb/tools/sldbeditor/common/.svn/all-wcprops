@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/src/!svn/ver/71403/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/common
+END
+ConsoleUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/common/ConsoleUtil.java
+END
+SeDataType.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/src/!svn/ver/71403/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/common/SeDataType.java
+END
+Constant.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/src/!svn/ver/67376/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/common/Constant.java
+END
+SldbEditorInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/common/SldbEditorInfo.java
+END

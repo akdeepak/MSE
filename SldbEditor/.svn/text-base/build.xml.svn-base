@@ -1,0 +1,181 @@
+<!-- PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY -->
+<!-- Copyright @ 2009 Telcordia Technologies, Inc. -->
+<!-- All Rights Reserved. -->
+<!-- @(#) $URL$ $Rev$ $LastChangedBy$ $Date$ -->
+
+
+<project name="SldbEditor" default="developer-build">
+
+	<!-- Note: root.properties will only use for for ant build in eclipse workspace/-->
+	<property location="." name="unit.test.report.dir" />
+	<property file="../ant-files/root.properties" />
+	<property location="../../" name="root.dir" />
+	<import file="${root.dir}/ant-files/targets.xml" />
+
+	<property name="unit.dir" location="." />
+
+	<property name="base" location="." />
+	<property name="src" location="src" />
+	<property name="src.dir" location="${src}/main/java" />
+
+	<property name="build" location="build" />
+	<property name="build.ext" location="build_ext" />
+	<property name="build.dir" location="${build}/com.telcordia.cvas.mse.sldb.tools.sldbeditor" />
+	<property name="build.ext.dir" location="${build.ext}/com.telcordia.cvas.mse.sldb.tools.sldbeditor" />
+	<property name="classes.dir" location="${build.dir}/classes" />
+	<property name="classes.ext.dir" location="${build.ext.dir}/classes" />
+
+	<property name="icons.dir" location="icons" />
+	<property name="metainf.dir" location="META-INF" />
+	<property name="eclipse.dir" location="eclipse" />
+	<property name="eclipse.plugin.dir" location="${eclipse.dir}/plugins" />
+	<property name="eclipse.p2.dir" location="${eclipse.dir}/p2" />
+
+	<target name="clean" description="Cleanup everything">
+		<echo message="cleaning" />
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+
+	<target name="initialize" description="initialize the build process" xmlns:telcordia="http://www.telcordia.com/ant" depends="validate,resolve-root,resolve">
+
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${eclipse.dir}" />
+
+		<mkdir dir="${build}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${build.dir}/META-INF" />
+		<mkdir dir="${build.dir}/lib" />
+		<mkdir dir="${build.dir}/icons" />
+		<mkdir dir="${eclipse.dir}" />
+		<unzip src="${ret.dir}/eclipse.zip" dest="${unit.dir}" />
+
+		<delete dir="${eclipse.plugin.dir}/com.telcordia.cvas.mse.sldb.tools.sldbeditor" />
+		<delete file="${eclipse.plugin.dir}/com.telcordia.cvas.mse.sldb.tools.sldbeditor.jar" />
+
+		<delete dir="${eclipse.p2.dir}/com.telcordia.cvas.mse.sldb.tools.sldbeditor" />
+		<delete file="${eclipse.p2.dir}/com.telcordia.cvas.mse.sldb.tools.sldbeditor.jar" />
+
+	</target>
+
+	<!-- <target name="compile" description="Compile source" depends="clean, initialize"> -->
+
+	<target name="create-production-pojo-jar" description="create jar and war file" xmlns:telcordia="http://www.telcordia.com/ant" depends="generate-resources,initialize">
+		<delete dir="${target.dir}/tmp" />
+		<mkdir dir="${target.dir}/tmp/META-INF" />
+		
+		<copy file="${metainf.dir}/MANIFEST_INT.MF" tofile="${target.dir}/tmp/META-INF/MANIFEST.MF" overwrite="true" />
+
+		
+		<echo message="create-production-pojo-jar" />
+
+		<fileset id="needed.libs.id" dir="${ret.dir}">
+
+			<include name="commons-logging.jar" />
+			<include name="jbossall-client.jar" />
+			<include name="jboss-annotations-ejb3.jar" />
+			<include name="jboss-ejb3-client.jar" />
+			<include name="libisdb_simdb_shr_pc.jar" />
+			<include name="libisdb_simdb_shr_int.jar" />
+			<include name="log4j.jar" />
+			<include name="sldb_bean_access.jar" />
+			<include name="xpp3.jar" />
+			<include name="xstream.jar" />
+
+			<!-- <include name="jsldbtool.jar" /> 
+			<include name="ejb_client.jar" /> 
+			<include name="spring.jar" /> -->
+
+		</fileset>
+
+		<path id="cp.compile">
+			<fileset refid="needed.libs.id" />
+			<fileset dir="${eclipse.plugin.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+			<!-- <fileset dir="${eclipse.p2.dir}"> -->
+			<!--   <include name="**/*.jar" /> -->
+			<!-- </fileset> -->
+		</path>
+
+		<echo message="build.dir = ${build.dir}" />
+		<echo message="src = ${src}" />
+
+		<javac srcdir="${src.dir}" destdir="${classes.dir}">
+			<classpath refid="cp.compile" />
+		</javac>
+
+		<copy todir="${build.dir}/META-INF" overwrite="true" file="${target.dir}/tmp/META-INF/MANIFEST.MF" />
+		<copy todir="${build.dir}" file="plugin.xml" />
+
+		<replaceregexp file="${build.dir}/META-INF/MANIFEST.MF" match="src/main/java" replace="classes" byline="true" />
+
+		<copy todir="${build.dir}/lib">
+			<fileset refid="needed.libs.id" />
+		</copy>
+
+		<copy todir="${build.dir}/icons">
+			<fileset dir="${icons.dir}">
+				<include name="**/*.gif" />
+				<include name="**/*.jpeg" />
+				<include name="**/*.png" />
+			</fileset>
+		</copy>
+
+		<!-- <copy todir="${build.dir}" file="schemaTemplateContext.xml"/>	-->
+		<copy todir="${classes.dir}" file="${src.dir}/Sldb_Config.properties" />
+
+		<fileset id="sldbeditor.fileset.id" dir="${build.dir}">
+		</fileset>
+
+		<zip destfile="${build}/com.telcordia.cvas.mse.sldb.tools.sldbeditor.zip" zipfile="${build}/com.telcordia.cvas.mse.sldb.tools.sldbeditor.zip">
+			<zipfileset dir="${build.dir}" prefix="com.telcordia.cvas.mse.sldb.tools.sldbeditor" />
+		</zip>
+
+		<copy file="${metainf.dir}/MANIFEST_EXT.MF" tofile="${target.dir}/tmp/META-INF/MANIFEST.MF" overwrite="true" />
+
+
+		
+		<copy todir="${build.ext.dir}/META-INF" overwrite="true" file="${target.dir}/tmp/META-INF/MANIFEST.MF" />
+		<copy todir="${build.ext.dir}" file="plugin.xml" />
+
+		<replaceregexp file="${build.ext.dir}/META-INF/MANIFEST.MF" match="src/main/java" replace="classes" byline="true" />
+
+		<copy todir="${build.ext.dir}/lib">
+			<fileset refid="needed.libs.id" />
+		</copy>
+
+		<copy todir="${build.ext.dir}/icons">
+			<fileset dir="${icons.dir}">
+				<include name="**/*.gif" />
+				<include name="**/*.jpeg" />
+				<include name="**/*.png" />
+			</fileset>
+		</copy>
+
+		<!-- <copy todir="${build.ext.dir}" file="schemaTemplateContext.xml"/>	-->
+		<copy todir="${classes.ext.dir}" file="${src.dir}/Sldb_Config.properties" />
+		<javac srcdir="${src.dir}" destdir="${classes.ext.dir}">
+			<classpath refid="cp.compile" />
+		</javac>
+		<fileset id="sldbeditor.fileset.id" dir="${build.ext.dir}">
+		</fileset>
+
+
+
+		<zip destfile="${build.ext}/com.telcordia.cvas.mse.sldb.tools.sldbeditor.zip" zipfile="${build.ext}/com.telcordia.cvas.mse.sldb.tools.sldbeditor.zip">
+			<zipfileset dir="${build.ext.dir}" prefix="com.telcordia.cvas.mse.sldb.tools.sldbeditor" />
+		</zip>
+
+		<copy todir="${lib.dir}" file="${build.ext}/com.telcordia.cvas.mse.sldb.tools.sldbeditor.zip" />
+
+	</target>
+
+
+
+
+
+
+</project>

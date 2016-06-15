@@ -1,0 +1,33 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.action;
+
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.Connection;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.sdr.dialog.SdrCreateDialog;
+
+public class CreateSdrAction extends AbstractSeAction {
+    private String id;
+
+    public CreateSdrAction() {
+
+        super("ConnectionsView.Actions.createSDR",
+                "ConnectionsView.Actions.createSDRToolTip",
+                "Images.RecordLeafIcon");
+        this.id = "CreateSdrAction";
+
+    }
+
+    public void run() {
+        Connection connection = (Connection) getView().getSelectedConnection(
+                true);
+        new SdrCreateDialog(connection);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+}

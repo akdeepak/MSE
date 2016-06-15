@@ -1,0 +1,149 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.wizard;
+
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
+import com.telcordia.cvas.mse.db.sldbobj.DataType;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.ConsoleUtil;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.Constant;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.template.FieldTemplate;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.template.TableTemplate;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.util.TextUtil;
+
+/*
+ * This wizard page gather information about table, validate it and save into table template.
+ *
+ * TablePage
+ *
+ * @author igor.golovan
+ * @version $Rev: 64201 $
+ */
+class TablePage extends WizardPage {
+
+    private SchemaElementsWiz schemaElementsWizard;
+    private TableTemplate tableTemplate;
+
+    private Label lblTableName = null;
+    private Text txtName = null;
+    private Label lblColumnsNum = null;
+    private Text txtColumnsNum = null;
+
+    public TablePage(SchemaElementsWiz schemaElementsWizard) {
+        super(
+                ((TableTemplate) schemaElementsWizard.getSchTemplate()).getTableName());
+        this.schemaElementsWizard = schemaElementsWizard;
+        this.tableTemplate = (TableTemplate) schemaElementsWizard.getSchTemplate();
+        setTitle(this.tableTemplate.getTableName());
+        setDescription(Constant.TABLE_DESCRIPTION);
+    }
+
+    /**
+     * Creates the page controls
+     */
+    public void createControl(Composite parent) {
+        GridData gridData = new GridData();
+        gridData.horizontalSpan = 2;
+        GridLayout gridLayout = new GridLayout();
+        gridLayout.numColumns = 3;
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setLayout(gridLayout);
+        GridData layoutTxtSize = new GridData();
+        layoutTxtSize.widthHint = 160;
+        layoutTxtSize.horizontalAlignment = SWT.RIGHT;
+
+        lblTableName = new Label(composite, SWT.NONE);
+        lblTableName.setText(Constant.TABLE_NAME);
+        lblTableName.setLayoutData(gridData);
+
+        txtName = new Text(composite, SWT.BORDER);
+        txtName.setText(tableTemplate.getTableName());
+        txtName.setLayoutData(layoutTxtSize);
+
+        txtName.addModifyListener(new ModifyListener() {
+
+            @Override
+            public void modifyText(ModifyEvent arg0) {
+
+                if (txtName.getText() != "") {
+                    tableTemplate.setTableName(txtName.getText());
+                    setPageComplete(true);
+                }
+                else {
+                    tableTemplate.setTableName("");
+                    setPageComplete(false);
+                }
+
+            }
+        });
+        TextUtil.getValidText(txtName, DataType.NUMSTRING);
+
+        lblColumnsNum = new Label(composite, SWT.NONE);
+        lblColumnsNum.setText(Constant.TABLE_COLUMNS);
+        // add filler
+        new Label(composite, SWT.NONE);
+
+        txtColumnsNum = new Text(composite, SWT.BORDER);
+        txtColumnsNum.setText("" + tableTemplate.getFieldTemplates().size());
+        txtColumnsNum.setLayoutData(layoutTxtSize);
+
+        TextUtil.getValidText(txtColumnsNum, DataType.INTEGER);
+        txtColumnsNum.addModifyListener(new ModifyListener() {
+
+            @Override
+            public void modifyText(ModifyEvent arg0) {
+                if (txtColumnsNum.getText() != "") {
+                    if (Integer.parseInt(txtColumnsNum.getText()) == 0)
+                        setPageComplete(false);
+                    else {
+                        validate();
+                        setPageComplete(true);
+                    }
+                }
+            }
+        });
+        setPageComplete(false);
+        setControl(composite);
+
+    }
+
+    private void validate() {
+
+        int columnNumber = Integer.parseInt(txtColumnsNum.getText());
+
+        int pageCount = schemaElementsWizard.getPageCount();
+        ConsoleUtil.addMessage("pageCount=" + pageCount + " , columnNumber="
+                + columnNumber, true);
+        if (pageCount - 1 < columnNumber) {
+            for (int i = 0; i <= columnNumber - pageCount; i++) {
+                FieldTemplate fieldTemplate = new FieldTemplate(
+                        String.valueOf(i), "");
+                schemaElementsWizard.addPage(new FieldPage(fieldTemplate,
+                        schemaElementsWizard, true));
+                tableTemplate.getFieldTemplates().add(fieldTemplate);
+                schemaElementsWizard.getContainer().updateButtons();
+            }
+        }
+        else if (pageCount - 1 > columnNumber) {
+            schemaElementsWizard.removeLastPages(pageCount - 1 - columnNumber);
+            for (int i = pageCount - 2; i >= columnNumber; i--) {
+                if (i >= 0) {
+                    tableTemplate.getFieldTemplates().remove(i);
+                }
+            }
+        }
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL: http://jcvas.iscp.telcordia.com:8080/src/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/wizard/TablePage.java $ $Rev: 64201 $ $LastChangedBy: hvijayan $ $Date: 2012-01-09 17:31:23 +0530 (Mon, 09 Jan 2012) $" };
+
+}

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/src/!svn/ver/64550/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/setable
+END
+ITaskListViewer.java
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/setable/ITaskListViewer.java
+END
+SchTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/setable/SchTask.java
+END
+SchLabelProvider.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/src/!svn/ver/64550/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/setable/SchLabelProvider.java
+END
+SchTaskList.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/src/!svn/ver/64201/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/setable/SchTaskList.java
+END
+ExampleTaskSorter.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/setable/ExampleTaskSorter.java
+END
+SchCellModifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/src/!svn/ver/64550/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/schema/setable/SchCellModifier.java
+END

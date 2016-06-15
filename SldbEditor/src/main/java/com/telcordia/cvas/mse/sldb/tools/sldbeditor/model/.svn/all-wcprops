@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/src/!svn/ver/64550/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model
+END
+RecordLeaf.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/RecordLeaf.java
+END
+SdrStoreAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/SdrStoreAdapter.java
+END
+SchemaLeaf.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/SchemaLeaf.java
+END
+ConnectionManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/ConnectionManager.java
+END
+Connection.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/Connection.java
+END
+NewSchStoreAdatper.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/src/!svn/ver/64550/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/NewSchStoreAdatper.java
+END
+SchStoreAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/src/!svn/ver/64550/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/SchStoreAdapter.java
+END
+RecordBranch.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/RecordBranch.java
+END
+SchemaBranch.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/src/!svn/ver/52253/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/model/SchemaBranch.java
+END

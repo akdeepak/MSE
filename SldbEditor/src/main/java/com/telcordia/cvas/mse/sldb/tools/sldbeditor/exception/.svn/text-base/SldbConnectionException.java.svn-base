@@ -1,0 +1,19 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.exception;
+
+public class SldbConnectionException extends Exception {
+    private static final long serialVersionUID = 1L;
+
+    public SldbConnectionException(String message) {
+        super(message);
+    }
+
+    public SldbConnectionException(Exception cause) {
+        super(cause);
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+}

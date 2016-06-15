@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Resource Manager Category"
+            id="sldbschemaeditor">
+      </category>
+      <view
+            name="XML Navigator"
+            category="sldbschemaeditor"
+            class="com.telcordia.cvas.mse.sldb.tools.sldbeditor.view.XmlView"
+            id="com.telcordia.cvas.mse.sldb.tools.sldbeditor.view.xmlView">
+      </view> 
+      <view
+            name="SLDB Navigator"
+            category="sldbschemaeditor"
+            class="com.telcordia.cvas.mse.sldb.tools.sldbeditor.view.GuiView"
+            id="com.telcordia.cvas.mse.sldb.tools.sldbeditor.view.GuiView">
+      </view>
+      <view
+            category="sldbschemaeditor"
+            class="com.telcordia.cvas.mse.sldb.tools.sldbeditor.view.SchemaElementsView"
+            id="com.telcordia.cvas.mse.sldb.tools.sldbeditor.view.schemaElementsView"
+            name="Schema Elements">
+      </view>      
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="SLDB Editor"
+            class="com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.ResourceManagerPerspectiveFactory"
+            id="com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.ResourceManagerPerspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor	
+            id="com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.editor.multiPageEditor"
+            name="Schema Editor"
+            extensions="xml"          
+            class="com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.editor.MultiPageEditor">
+      </editor>
+
+   </extension>   
+   
+	 <extension
+	     point="org.eclipse.ui.editors">
+	  <editor
+	        class="com.telcordia.cvas.mse.sldb.tools.sldbeditor.sdr.editor.SdrMultiPageEditor"
+	        extensions="xml"
+	        id="com.telcordia.cvas.mse.sldb.tools.sldbeditor.sdr.editor.sdrMultiPageEditor"
+	        name="SDR Editor">
+	  </editor>
+	
+	   </extension>   
+</plugin>

@@ -1,0 +1,330 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.wizard;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
+
+import com.telcordia.cvas.mse.db.sldbobj.DataType;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.Constant;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.template.FieldTemplate;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.util.SeHelper;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.util.SeMessages;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.util.TextUtil;
+
+/**
+ * This page gathers more information about the complaint
+ */
+class FieldPage extends WizardPage {
+    private FieldTemplate fieldTemplate;
+    private SchemaElementsWiz schemaElementsWizard;
+
+    private Text txtName = null;
+    private Combo cmbType = null;
+    private Composite compUpdateType = null;
+    private Button rbnNone = null;
+    private Button rbnModifiable = null;
+    private Button rbnDelta = null;
+    private Button rbnKey = null;
+    private Text txtAppType = null;
+    private Text txtDefaultValue = null;
+    private Text txtMaxLength = null;
+    private Text txtAppData = null;
+    private Label pageNumber;
+    private boolean isTable;
+
+    public FieldPage(FieldTemplate tableTemplate,
+            SchemaElementsWiz schemaElementsWizard, boolean isTable) {
+        super(tableTemplate.getFieldName() == null
+                ? ""
+                : tableTemplate.getFieldName());
+        this.isTable = isTable;
+        this.fieldTemplate = tableTemplate;
+        this.schemaElementsWizard = schemaElementsWizard;
+        setTitle(tableTemplate.getFieldName() == null
+                ? ""
+                : tableTemplate.getFieldName());
+        setDescription(Constant.FIELD_DESCRIPTION);
+        setPageComplete(false);
+    }
+
+    public void createControl(Composite parent) {
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setLayout(new GridLayout(2, false));
+        setLabel(composite, "");
+
+        pageNumber = new Label(composite, SWT.BOLD);
+        List<IWizardPage> pages = Arrays.asList(schemaElementsWizard.getPages());
+        if (isTable) {
+            int index = pages.indexOf(this);
+            pageNumber.setText(Constant.COLUMN_NUMBER + index);
+            pageNumber.setFont(new Font(parent.getDisplay(),
+                    SeMessages.getString("Font.Arial"), 10, SWT.BOLD));
+            setLabel(composite, "");
+            setLabel(composite, "");
+        }
+
+        //FieldName GUI
+        setLabel(composite, Constant.FIELD_NAME);
+        GridData layoutWijetSize = new GridData();
+        layoutWijetSize.widthHint = 160;
+        txtName = new Text(composite, SWT.BORDER);
+        if (fieldTemplate.getFieldName() != null) {
+            txtName.setText(fieldTemplate.getFieldName());
+        }
+        else {
+            txtName.setText("");
+        }
+        txtName.setLayoutData(layoutWijetSize);
+        TextUtil.getValidText(txtName, DataType.NUMSTRING);
+
+        //DataType GUI
+        setLabel(composite, Constant.DATA_TYPE);
+        cmbType = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
+
+        // set values and default value for data type from template
+        int defaultIndex = 0;
+        System.out.println(DataType.values().length);
+        // Reducing three datatypes from UI(i.e)table,ID,unknown
+        int size = DataType.values().length - 3;
+        String[] dataTypes = new String[size];
+        for (int i = 0; (i < size); i++) {
+            dataTypes[i] = DataType.values()[i].name();
+            if ((fieldTemplate.getDataType() == DataType.values()[i])
+                    && fieldTemplate.getDataType() != DataType.TABLE
+                    && fieldTemplate.getDataType() != DataType.UNKNOWN) {
+                defaultIndex = i;
+            }
+        }
+        cmbType.setItems(dataTypes);
+        cmbType.select(defaultIndex);
+        cmbType.setLayoutData(layoutWijetSize);
+
+        //UpdateType GUI
+        setLabel(composite, Constant.UPDATE_TYPE);
+        GridLayout gridLayout2 = new GridLayout();
+        gridLayout2.numColumns = 3;
+        compUpdateType = new Composite(composite, SWT.NONE);
+        compUpdateType.setLayout(gridLayout2);
+        if (isTable) {
+            rbnKey = new Button(compUpdateType, SWT.RADIO);
+            rbnKey.setText(SeHelper.getUpdateTypes()[1]);
+            rbnKey.setSelection(true);
+            fieldTemplate.setUpdateType(1);
+        }
+        rbnModifiable = new Button(compUpdateType, SWT.RADIO);
+        rbnModifiable.setText(SeHelper.getUpdateTypes()[3]);
+        if (!isTable)
+            rbnModifiable.setSelection(true);
+
+        //Radio Button to select Key only for embedded table fields. 
+
+        rbnDelta = new Button(compUpdateType, SWT.RADIO);
+        rbnDelta.setText(SeHelper.getUpdateTypes()[2]);
+
+        rbnNone = new Button(compUpdateType, SWT.RADIO);
+        rbnNone.setText(SeHelper.getUpdateTypes()[0]);
+
+        //Application Type GUI
+        setLabel(composite, Constant.APPLICATION_TYPE);
+        txtAppType = new Text(composite, SWT.BORDER);
+        txtAppType.setText(String.valueOf(fieldTemplate.getApplicationType()));
+        txtAppType.setLayoutData(layoutWijetSize);
+
+        TextUtil.getValidText(txtAppType, DataType.NUMSTRING);
+
+        //Default value GUI
+        if (!isTable) {
+            setLabel(composite, Constant.DEFAULT_VALUE);
+            txtDefaultValue = new Text(composite, SWT.BORDER);
+            String defaultValue = fieldTemplate.getDefaultValue();
+            //            if (defaultValue == null) {
+            //                defaultValue = "";
+            //            }
+
+            txtDefaultValue.setText("0");
+            txtDefaultValue.setLayoutData(layoutWijetSize);
+        }
+        //Maximum Lenght GUI
+        setLabel(composite, Constant.MAX_LENGTH);
+        txtMaxLength = new Text(composite, SWT.BORDER);
+        txtMaxLength.setText(String.valueOf(fieldTemplate.getMaximumLength()));
+        txtMaxLength.setLayoutData(layoutWijetSize);
+        TextUtil.getValidText(txtMaxLength, DataType.INTEGER);
+
+        //Application data GUI
+        setLabel(composite, Constant.APPLICATION_DATA);
+        txtAppData = new Text(composite, SWT.BORDER);
+        txtAppData.setText(""
+                + (fieldTemplate.getApplicationData() == null
+                        ? ""
+                        : fieldTemplate.getApplicationData()));
+        txtAppData.setLayoutData(layoutWijetSize);
+        TextUtil.getValidText(txtAppData, DataType.NUMSTRING);
+
+        addListeners();
+        setControl(composite);
+
+    }
+
+    private void addListeners() {
+
+        txtName.addListener(SWT.Modify, new Listener() {
+
+            @Override
+            public void handleEvent(Event arg0) {
+                if (txtName.getText().length() == 0)
+                    setPageComplete(false);
+                else
+                    setPageComplete(true);
+                fieldTemplate.setFieldName(txtName.getText());
+            }
+        });
+
+        cmbType.addListener(SWT.Modify, new Listener() {
+            @Override
+            public void handleEvent(Event arg0) {
+                fieldTemplate.setDataType(DataType.valueOf(cmbType.getText()));
+                setMaxLength();
+                fieldTemplate.setMaximumLength(Integer.parseInt(txtMaxLength.getText()));
+            }
+
+        });
+        if (!isTable) {
+            txtDefaultValue.addVerifyListener(new VerifyListener() {
+
+                @Override
+                public void verifyText(VerifyEvent event) {
+                    TextUtil.validate(txtDefaultValue, event,
+                            fieldTemplate.getDataType());
+                }
+            });
+
+            txtDefaultValue.addListener(SWT.Modify, new Listener() {
+
+                @Override
+                public void handleEvent(Event arg0) {
+                    if (txtDefaultValue.getText().trim().equalsIgnoreCase("")) {
+                        fieldTemplate.setDefaultValue(null);
+                    }
+                    else if (txtDefaultValue.getText().trim().equalsIgnoreCase(
+                            "null")) {
+                        fieldTemplate.setDefaultValue(null);
+                    }
+                    else
+                        fieldTemplate.setDefaultValue(txtDefaultValue.getText());
+                }
+            });
+        }
+        if (isTable) {
+
+            rbnKey.addListener(SWT.Selection, new Listener() {
+                @Override
+                public void handleEvent(Event arg0) {
+
+                    fieldTemplate.setUpdateType(1);
+                }
+            });
+        }
+        rbnModifiable.addListener(SWT.Selection, new Listener() {
+            @Override
+            public void handleEvent(Event arg0) {
+
+                fieldTemplate.setUpdateType(8);
+            }
+        });
+        rbnDelta.addListener(SWT.Selection, new Listener() {
+            @Override
+            public void handleEvent(Event arg0) {
+                fieldTemplate.setUpdateType(26);
+            }
+        });
+        rbnNone.addListener(SWT.Selection, new Listener() {
+            @Override
+            public void handleEvent(Event arg0) {
+                fieldTemplate.setUpdateType(0);
+            }
+        });
+        txtMaxLength.addListener(SWT.Modify, new Listener() {
+
+            @Override
+            public void handleEvent(Event arg0) {
+
+                fieldTemplate.setMaximumLength(Integer.parseInt(txtMaxLength.getText()));
+            }
+        });
+
+        txtAppType.addListener(SWT.Modify, new Listener() {
+
+            @Override
+            public void handleEvent(Event arg0) {
+
+                if (txtAppType.getText() != "")
+                    fieldTemplate.setApplicationType(Integer.parseInt(txtAppType.getText()));
+            }
+        });
+        txtAppData.addListener(SWT.Modify, new Listener() {
+
+            @Override
+            public void handleEvent(Event arg0) {
+
+                fieldTemplate.setApplicationData(txtAppData.getText());
+            }
+        });
+    }
+
+    private void setMaxLength() {
+
+        switch (DataType.valueOf(cmbType.getText())) {
+
+            case INTEGER:
+                txtMaxLength.setText("4");
+                break;
+            case SHORT:
+                txtMaxLength.setText("2");
+                break;
+            case BYTE:
+                txtMaxLength.setText("1");
+                break;
+            case FLOAT:
+                txtMaxLength.setText("4");
+                break;
+            case STRING:
+                txtMaxLength.setText("4");
+                break;
+            case LONGSTRING:
+                txtMaxLength.setText("4");
+                break;
+            case NUMSTRING:
+                txtMaxLength.setText("4");
+                break;
+            default:
+                txtMaxLength.setText("-1");
+        }
+    }
+
+    private void setLabel(Composite composite, String text) {
+        new Label(composite, SWT.NONE).setText(text);
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+
+}

@@ -1,0 +1,231 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.setable;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
+import com.telcordia.iscp.platform.isdbSimdbShr.isdbUpdateTypeJ;
+
+import com.telcordia.cvas.mse.db.sldbobj.SchFieldStore;
+import com.telcordia.cvas.mse.db.sldbobj.SchStore;
+
+/**
+ * (c) Copyright Mirasol Op'nWorks Inc. 2002, 2003. 
+ * http://www.opnworks.com
+ * Created on Apr 2, 2003 by lgauthier@opnworks.com
+ * 
+ */
+
+/**
+ * class used as a model for schema Table viewer.
+ * 
+ * @author dkarunan
+ *
+ * 
+ */
+public class SchTask {
+
+    private String fieldName;
+    private String dataType;
+    private int updateType;
+    private String applicationType;
+    private String defaultValue;
+    private String maxLength;
+    private String applicationData;
+    private SchStore embSchema;
+
+    // Not used any where
+    private boolean completed = false;
+    private String description = "";
+    private String owner = "?";
+    private int percentComplete = 0;
+
+    /**
+     * Create a task with an initial description
+     * 
+     * @param string
+     */
+    public SchTask(String string) {
+
+        super();
+        //  setDescription(string);
+        setFieldName(string);
+    }
+
+    /**
+     * 
+     * Create a task with an initial schfieldStore of embedded schema
+     *
+     * @param fieldName
+     * @param dataType
+     * @param updateType
+     * @param applicationType
+     * @param defaultValue
+     * @param maxLength
+     * @param applicationData
+     */
+
+    public SchTask(String fieldName, String dataType, int updateType,
+            String applicationType, String defaultValue, String maxLength,
+            String applicationData) {
+        this.fieldName = fieldName;
+        this.dataType = dataType;
+        this.updateType = updateType;
+        this.applicationType = applicationType;
+        this.defaultValue = defaultValue;
+        this.maxLength = maxLength;
+        this.applicationData = applicationData;
+    }
+
+    /**
+     * @return SchStore parent schema 
+     * 
+     */
+    public SchStore getEmbSchema() {
+        return embSchema;
+    }
+
+    /**
+     * Set the 'embSchema' property 
+     * Not used anywhere now
+     */
+    public void setEmbSchema(SchStore embSchema) {
+        this.embSchema = embSchema;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+
+    public void setUpdateType(int updateType) {
+        this.updateType = updateType;
+    }
+
+    public void setApplicationType(String applicationType) {
+        this.applicationType = applicationType;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public void setMaxLength(String maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    public void setApplicationData(String appData) {
+        this.applicationData = appData;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public String getDataType() {
+        return dataType;
+    }
+
+    public int getUpdateType() {
+        return updateType;
+    }
+
+    public String getApplicationType() {
+        return applicationType;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public String getMaxLength() {
+        return maxLength;
+    }
+
+    public String getApplicationData() {
+        return applicationData;
+    }
+
+    // Not Used have to remove
+    /**
+     * Create a task with an initial description
+     * 
+     * @param string
+     */
+
+    /**
+     * @return true if completed, false otherwise
+     */
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    /**
+     * @return String task description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @return String task owner
+     */
+    public String getOwner() {
+        return owner;
+    }
+
+    /**
+     * @return int percent completed
+     * 
+     */
+    public int getPercentComplete() {
+        return percentComplete;
+    }
+
+    /**
+     * Set the 'completed' property
+     * 
+     * @param b
+     */
+    public void setCompleted(boolean b) {
+        completed = b;
+    }
+
+    /**
+     * Set the 'description' property
+     * 
+     * @param string
+     */
+    public void setDescription(String string) {
+        description = string;
+    }
+
+    /**
+     * Set the 'owner' property
+     * 
+     * @param string
+     */
+    public void setOwner(String string) {
+        owner = string;
+    }
+
+    /**
+     * Set the 'percentComplete' property
+     * 
+     * @param i
+     */
+    public void setPercentComplete(int i) {
+        percentComplete = i;
+    }
+    
+  
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+
+}

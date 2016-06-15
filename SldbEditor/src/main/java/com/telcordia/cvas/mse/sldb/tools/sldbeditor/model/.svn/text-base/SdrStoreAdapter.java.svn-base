@@ -1,0 +1,25 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.model;
+
+import com.telcordia.cvas.mse.db.sldbobj.SdrStore;
+
+public class SdrStoreAdapter {
+    private SdrStore sdrStore;
+
+    public SdrStoreAdapter(SdrStore sdrStore) {
+        this.sdrStore = sdrStore;
+    }
+
+    public SdrStoreAdapter() {
+
+    }
+
+    public SdrStore getSdrStore() {
+        return sdrStore;
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+}

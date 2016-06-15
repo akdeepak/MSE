@@ -1,0 +1,33 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.util;
+
+import java.util.ResourceBundle;
+
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.schema.Activator;
+
+/**
+ * 
+ * This class loads the property file through resource bundle
+ *
+ * SeMessages
+ *
+ * @author dkarunan
+ * @version $Rev$
+ *
+ */
+public class SeMessages {
+    private static ResourceBundle resourceBundle = null;
+
+    public static String getString(String key) {
+        String value = null;
+        resourceBundle = Activator.getResourceBundle();
+        value = (String) resourceBundle.getObject(key);
+        //  System.out.println(key + " - " + resourceBundle.getObject(key));
+        return value;
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL$ $Rev$ $LastChangedBy$ $Date$" };
+}

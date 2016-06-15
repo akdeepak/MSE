@@ -1,0 +1,232 @@
+package com.telcordia.cvas.mse.sldb.tools.sldbeditor.sdr.wizard;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
+
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.ConsoleUtil;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.common.Constant;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.Connection;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.model.SdrStoreAdapter;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.template.SdrTemplate;
+import com.telcordia.cvas.mse.sldb.tools.sldbeditor.util.SeHelper;
+
+/**
+ * 
+ * create Subscriber wizard
+ *
+ * @author dkarunan
+ *
+ */
+public class SdrCreateWizard extends Wizard {
+
+    private IWizardContainer container = null;
+    private List<IWizardPage> pages = new ArrayList<IWizardPage>();
+    private boolean needsProgressMonitor = false;
+    private boolean forcePreviousAndNextButtons = false;
+    private boolean isHelpAvailable = false;
+    private RGB titleBarColor = null;
+    private String windowTitle = null;
+    private IDialogSettings dialogSettings = null;
+    private SdrTemplate subscriberTemplate;
+    private Connection connection;
+
+    public SdrCreateWizard(Connection connection) {
+        super();
+        subscriberTemplate = new SdrTemplate();
+        this.connection = connection;
+        setWindowTitle(Constant.CREATE_SDR_WIZARD);
+        addPage(new SdrInputPage(subscriberTemplate, connection));
+        addPage(new SdrSchemaPage(subscriberTemplate, connection));
+        addPage(new SdrFieldPage(subscriberTemplate, connection));
+    }
+
+    @Override
+    public boolean performFinish() {
+        if (SeHelper.isSdrExists(subscriberTemplate.getSubscriberId(),
+                connection))
+            MessageDialog.openError(null, Constant.SUBSCRIBER_DATA,
+                    String.format(Constant.ERROR_RECORD_EXIST,
+                            subscriberTemplate.getSubscriberId()));
+        else
+            CreateSubscriberRecord(connection);
+        return true;
+    }
+
+    public void CreateSubscriberRecord(Connection connection) {
+        //build and save Sdr
+        subscriberTemplate.buildSdr(connection);
+    }
+
+    public void addPage(IWizardPage page) {
+        pages.add(page);
+        page.setWizard(this);
+    }
+
+    public void addPages() {
+    }
+
+    //Disables/Enables the Finish Button
+    public boolean canFinish() {
+        if (!(pages.get(0)).isPageComplete()) {
+            return false;
+        }
+        return true;
+    }
+
+    public void createPageControls(Composite pageContainer) {
+        // the default behavior is to create all the pages controls
+        for (int i = 0; i < pages.size(); i++) {
+            IWizardPage page = pages.get(i);
+            //            page.createControl(pageContainer);
+        }
+    }
+
+    public void dispose() {
+        // notify pages
+        for (int i = 0; i < pages.size(); i++) {
+            (pages.get(i)).dispose();
+        }
+    }
+
+    public IWizardContainer getContainer() {
+        return container;
+    }
+
+    public IDialogSettings getDialogSettings() {
+        return dialogSettings;
+    }
+
+    public IWizardPage getNextPage(IWizardPage page) {
+        int index = pages.indexOf(page);
+        if (index == pages.size() - 1 || index == -1) {
+            // last page or page not found
+            return pages.get(index);
+        }
+        return pages.get(index + 1);
+    }
+
+    public IWizardPage getPage(String name) {
+        for (int i = 0; i < pages.size(); i++) {
+            IWizardPage page = pages.get(i);
+            String pageName = page.getName();
+            if (pageName.equals(name)) {
+                return page;
+            }
+        }
+        return null;
+    }
+
+    public int getPageCount() {
+        return pages.size();
+    }
+
+    public IWizardPage[] getPages() {
+        return (IWizardPage[]) pages.toArray(new IWizardPage[pages.size()]);
+    }
+
+    public IWizardPage getPreviousPage(IWizardPage page) {
+        int index = pages.indexOf(page);
+        if (index == 0 || index == -1) {
+            // first page or page not found
+            return null;
+        }
+        return pages.get(index - 1);
+    }
+
+    public Shell getShell() {
+        if (container == null) {
+            return null;
+        }
+        return container.getShell();
+    }
+
+    public IWizardPage getStartingPage() {
+        if (pages.size() == 0) {
+            return null;
+        }
+        return pages.get(0);
+    }
+
+    public RGB getTitleBarColor() {
+        return titleBarColor;
+    }
+
+    public String getWindowTitle() {
+        return windowTitle;
+    }
+
+    public boolean isHelpAvailable() {
+        return isHelpAvailable;
+    }
+
+    public boolean needsPreviousAndNextButtons() {
+        return forcePreviousAndNextButtons || pages.size() >= 1;
+    }
+
+    public boolean needsProgressMonitor() {
+        return needsProgressMonitor;
+    }
+
+    public boolean performCancel() {
+        return true;
+    }
+
+    public void setContainer(IWizardContainer wizardContainer) {
+        container = wizardContainer;
+    }
+
+    public void setDialogSettings(IDialogSettings settings) {
+        dialogSettings = settings;
+    }
+
+    public void setForcePreviousAndNextButtons(boolean b) {
+        forcePreviousAndNextButtons = b;
+    }
+
+    public void setHelpAvailable(boolean b) {
+        isHelpAvailable = b;
+    }
+
+    public void setNeedsProgressMonitor(boolean b) {
+        needsProgressMonitor = b;
+    }
+
+    public void setTitleBarColor(RGB color) {
+        titleBarColor = color;
+    }
+
+    public void setWindowTitle(String newTitle) {
+        windowTitle = newTitle;
+        if (container != null) {
+            container.updateWindowTitle();
+        }
+    }
+
+    public void removeLastPages(int pageCnt) {
+        int pageSize = pages.size();
+        for (int i = 0; i < pageCnt; i++) {
+            ConsoleUtil.addMessage("Remove page #" + (pageSize - 1 - i), true);
+            pages.remove(pageSize - 1 - i);
+        }
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    static final String[] WHAT_STRING = new String[] {
+            "PROPRIETARY TELCORDIA AND AUTHORIZED CLIENTS ONLY",
+            "Copyright @ 2009 Telcordia Technologies, Inc.",
+            "All Rights Reserved.",
+            "@(#) $URL: http://jcvas.iscp.telcordia.com:8080/src/trunk/delivered/MSE/SDP/SldbEditor/src/main/java/com/telcordia/cvas/mse/sldb/tools/sldbeditor/sdr/wizard/SdrCreateWizard.java $ $Rev: 50695 $ $LastChangedBy: achoubey $ $Date: 2011-09-20 11:51:45 +0530 (Tue, 20 Sep 2011) $" };
+
+}
